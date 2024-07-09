@@ -2,8 +2,8 @@ import { Search } from "lucide-react";
 
 function Header() {
   return (
-    <div className="p-5 shadow-sm  flex justify-between items-center">
-      <div className="gap-2 items-center flex p-2 border rounded-md max-w-lg">
+    <div className="p-5 shadow-sm bg-white flex justify-between items-center">
+      <div className="gap-2 items-center flex p-2 border rounded-md max-w-lg bg-white">
         <Search />
         <input type="text" placeholder="Search..." className="outline-none" />
       </div>
