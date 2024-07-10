@@ -14,6 +14,7 @@ import { useUser } from "@clerk/nextjs";
 import moment from "moment";
 import { TotalUsageContext } from "@/app/(context)/TotalUsageContext";
 import { useRouter } from "next/navigation";
+import { UpdateCreditUsageContext } from "@/app/(context)/UpdateCreditUsageContext";
 interface PROPS {
   params: {
     "template-slug": string;
@@ -29,7 +30,9 @@ function CreateNewContent(props: PROPS) {
   const [aiOutput, setAiOutput] = useState<string>("");
   const router = useRouter();
   const { totalUsage, setTotalUsage } = useContext(TotalUsageContext);
-
+  const { updateCreditUsage, setUpdateCreditUsage } = useContext(
+    UpdateCreditUsageContext
+  );
   const { user } = useUser();
 
   const GenerateAIContent = async (formData: any) => {
@@ -52,6 +55,7 @@ function CreateNewContent(props: PROPS) {
       result?.response.text()
     );
     setLoading(false);
+    setUpdateCreditUsage(Date.now());
   };
 
   const SaveInDB = async (formData: any, slug: any, aiResp: string) => {

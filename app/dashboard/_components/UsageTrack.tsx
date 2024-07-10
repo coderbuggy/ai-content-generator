@@ -1,5 +1,6 @@
 "use client";
 import { TotalUsageContext } from "@/app/(context)/TotalUsageContext";
+import { UpdateCreditUsageContext } from "@/app/(context)/UpdateCreditUsageContext";
 import { Button } from "@/components/ui/button";
 import { db } from "@/utils/db";
 import { AIOutput } from "@/utils/schema";
@@ -19,10 +20,15 @@ const UsageTrack = () => {
 
   const { user } = useUser();
   const { totalUsage, setTotalUsage } = useContext(TotalUsageContext);
-
+  const { updateCreditUsage, setUpdateCreditUsage } = useContext(
+    UpdateCreditUsageContext
+  );
   useEffect(() => {
     user && GetData();
   }, [user]);
+  useEffect(() => {
+    user && GetData();
+  }, [updateCreditUsage && user]);
 
   const GetData = async () => {
     /* @ts-ignore */
