@@ -70,7 +70,7 @@ export default [
     desc: "An AI Tool that generate codes for your progrramming languages",
     category: "Blog",
     icon: "https://cdn-icons-png.flaticon.com/128/6062/6062646.png",
-    aiPrompt: "Give me the code",
+    aiPrompt: "Give me the code that",
     slug: "coder-ai",
     form: [
       // {

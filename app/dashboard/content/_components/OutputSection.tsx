@@ -2,10 +2,19 @@ import { Button } from "@/components/ui/button";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
 import { Copy } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
-function OutputSection() {
+interface PROPS {
+  aiOutput: string;
+}
+
+function OutputSection({ aiOutput }: PROPS) {
   const editorRef: any = useRef();
+
+  useEffect(() => {
+    const editorInstance = editorRef.current.getInstance();
+    editorInstance.setMarkdown(aiOutput);
+  }, [aiOutput]);
 
   return (
     <div className="bg-white shadow-lg border rounded-lg">
