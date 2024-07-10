@@ -3,6 +3,7 @@ import { Gem, History, Home, Settings } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import UsageTrack from "./UsageTrack";
 
 function SideNav() {
   const MenuList = [
@@ -34,12 +35,12 @@ function SideNav() {
   }, []);
 
   return (
-    <div className="h-screen p-5 shadow-md rounded-sm border bg-white">
-      <div className="flex justify-center">
+    <div className="relative h-screen p-5 shadow-md rounded-sm border bg-white">
+      {/* <div className="flex justify-center">
         {" "}
         <Image src={"/logo.svg"} width={100} height={100} alt="logo"></Image>
-      </div>
-      <hr className="my-6 border" />
+      </div> */}
+      {/* <hr className="my-6 border" /> */}
       <div className="mt-3">
         {MenuList.map((menu, index) => (
           <div
@@ -51,6 +52,9 @@ function SideNav() {
             <h2 className="text-lg">{menu.name}</h2>
           </div>
         ))}
+      </div>
+      <div className="absolute bottom-10 left-0 w-full">
+        <UsageTrack />
       </div>
     </div>
   );

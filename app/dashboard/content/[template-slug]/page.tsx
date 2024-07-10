@@ -7,8 +7,13 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { chatSession } from "@/utils/AiModal";
-import { useState } from "react";
-
+import { useContext, useState } from "react";
+import { db } from "@/utils/db";
+import { AIOutput } from "@/utils/schema";
+import { useUser } from "@clerk/nextjs";
+import moment from "moment";
+import { TotalUsageContext } from "@/app/(context)/TotalUsageContext";
+import { useRouter } from "next/navigation";
 interface PROPS {
   params: {
     "template-slug": string;
@@ -22,10 +27,18 @@ function CreateNewContent(props: PROPS) {
 
   const [loading, setLoading] = useState(false);
   const [aiOutput, setAiOutput] = useState<string>("");
+  const router = useRouter();
+  const { totalUsage, setTotalUsage } = useContext(TotalUsageContext);
+
+  const { user } = useUser();
 
   const GenerateAIContent = async (formData: any) => {
+    if (totalUsage >= 10000) {
+      alert("Usage is full! Please Update!");
+      router.push("dashboard/billing");
+      return;
+    }
     setLoading(true);
-    debugger;
     const SelectedPrompt = selectedTemplate?.aiPrompt;
 
     const FinalAiPropmpt = SelectedPrompt + " " + JSON.stringify(formData);
@@ -33,7 +46,28 @@ function CreateNewContent(props: PROPS) {
     const result = await chatSession.sendMessage(FinalAiPropmpt);
 
     setAiOutput(result?.response.text());
+    await SaveInDB(
+      JSON.stringify(formData),
+      selectedTemplate?.slug,
+      result?.response.text()
+    );
     setLoading(false);
+  };
+
+  const SaveInDB = async (formData: any, slug: any, aiResp: string) => {
+    try {
+      /* @ts-ignore */
+      const result = await db.insert(AIOutput).values({
+        formData: JSON.stringify(formData),
+        templateSlug: slug,
+        aiResponse: aiResp,
+        createdBy: user?.primaryEmailAddress?.emailAddress,
+        createdAt: moment().format("DD/MM/YYYY"),
+      });
+      console.log(result);
+    } catch (error) {
+      console.error("Error saving in DB:", error);
+    }
   };
 
   return (
